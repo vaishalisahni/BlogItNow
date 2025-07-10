@@ -1,26 +1,99 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">BlogItNow</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar glass-navbar navbar-expand-lg navbar-dark fixed-top shadow-lg">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-3 text-white" href="/">
+      <i class="bi bi-journal-richtext me-2"></i> BlogItNow
+    </a>
+    <button
+      class="navbar-toggler border-0"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link fw-semibold px-3 text-white" href="/">
+            <i class="bi bi-house-fill me-1"></i>Home
+          </a>
         </li>
+
+        <% if (locals.user) { %>
         <li class="nav-item">
-          <a class="nav-link" href="#">Add Blog</a>
+          <a class="nav-link fw-semibold px-3 text-white" href="/blog/add-new">
+            <i class="bi bi-plus-circle-fill me-1"></i>Add Blog
+          </a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Vaishali Sahni
+          <a
+            class="nav-link dropdown-toggle fw-semibold px-3 text-white"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle me-1"></i><%= user.fullName %>
           </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Log out</a></li>
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4">
+            <li>
+              <a class="dropdown-item py-2 px-3" href="/user/logout">
+                <i class="bi bi-box-arrow-right me-2"></i>Log out
+              </a>
+            </li>
           </ul>
         </li>
+        <% } else { %>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle fw-semibold px-3 text-white"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle me-1"></i>Account
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4">
+            <li>
+              <a class="dropdown-item py-2 px-3" href="/user/signin">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Signin
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2 px-3" href="/user/signup">
+                <i class="bi bi-person-plus me-2"></i>Signup
+              </a>
+            </li>
+          </ul>
+        </li>
+        <% } %>
       </ul>
     </div>
   </div>
 </nav>
+
+
+<!-- Padding for fixed navbar -->
+<div style="padding-top: 80px;"></div>
+
+<% if (locals.error) { %>
+<div class="container mt-4">
+  <div class="alert glass-alert text-danger d-flex align-items-center">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div><%= locals.error %></div>
+  </div>
+</div>
+<% } %>
+
+<% if (locals.success) { %>
+<div class="container mt-4">
+  <div class="alert glass-alert text-success d-flex align-items-center">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div><%= locals.success %></div>
+  </div>
+</div>
+<% } %>

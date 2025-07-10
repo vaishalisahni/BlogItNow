@@ -1,32 +1,48 @@
-const {Router}=require("express");
-const User=require("../models/user");
+const { Router } = require("express");
+const User = require("../models/user");
+const { createTokenForUser } = require("../services/auth");
 
-const router=Router();
+const router = Router();
 
-router.get("/signin",(req,res)=>{
+router.get("/signin", (req, res) => {
     return res.render("signin");
 })
 
-router.get("/signup",(req,res)=>{
+router.get("/signup", (req, res) => {
     return res.render("signup");
 })
 // we will be using virtual functions - to match hashed password
-router.post("/signin",async(req,res)=>{
-    const {email,password}= req.body;
-    const user = User.matchPassword(email,password);
-    console.log(user);
+router.post("/signin", async (req, res) => {
+    const { email, password } = req.body;
 
+    try {
+        const token = await User.matchPasswordAndGenerateToken(email, password);
+        // console.log("token", token);
+        return res.cookie("token", token).redirect("/");
+    }
+    catch (error) {
+        return res.render("signin",
+            {
+                error: "Incorrect Email or Password",
+            }
+        );
+    }
 })
 
-router.post("/signup",async(req,res)=>{
-    const {fullName,email,password}= req.body;
-    await User.create(
+router.post("/signup", async (req, res) => {
+    const { fullName, email, password } = req.body;
+    const user=await User.create(
         {
             fullName,
             email,
             password,
         }
     );
-    res.redirect("/");
+    const token= createTokenForUser(user);
+    return res.cookie("token", token).redirect("/");
 })
-module.exports=router;
+router.get("/logout",(req,res)=>{
+    res.clearCookie("token").redirect("/");
+})
+
+module.exports = router;

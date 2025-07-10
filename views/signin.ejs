@@ -1,40 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <%- include('./partials/head') %>
-    <title>Signin</title>
-  </head>
-  <body>
-    <%- include('./partials/nav') %>
+    <title>Sign In - BlogItNow</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .signin-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .signin-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            border: none;
+        }
+        .signin-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .signin-header h2 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .signin-header p {
+            color: #666;
+            margin-bottom: 0;
+        }
+        .form-floating {
+            margin-bottom: 20px;
+        }
+        .form-floating input {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        .form-floating input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .form-floating label {
+            color: #666;
+            font-weight: 500;
+        }
+        .btn-signin {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .btn-signin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: #666;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e9ecef;
+        }
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            font-size: 14px;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .signup-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .back-home:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .welcome-text {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+        }
+        .brand-logo {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .signin-card {
+                margin: 20px;
+                padding: 30px;
+            }
+            .back-home {
+                position: static;
+                display: inline-block;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-home">
+        <i class="bi bi-arrow-left me-2"></i>Back to Home
+    </a>
 
-    <div class="container">
-      <form action="/user/signin" method="post">
+    <div class="signin-container">
+        <div class="signin-card">
+            <div class="signin-header">
+                <div class="brand-logo">
+                    <i class="bi bi-journal-richtext text-primary"></i>
+                </div>
+                <h2>Welcome Back!</h2>
+                <p>Sign in to continue your blogging journey</p>
+            </div>
 
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Email address</label>
-          <input
-            type="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            name="email"
-            aria-describedby="emailHelp"
-          />
+            <form action="/user/signin" method="post">
+                <div class="form-floating">
+                    <input 
+                        type="email" 
+                        class="form-control" 
+                        id="email" 
+                        name="email" 
+                        placeholder="name@example.com"
+                        required
+                    >
+                    <label for="email">
+                        <i class="bi bi-envelope me-2"></i>Email address
+                    </label>
+                </div>
+
+                <div class="form-floating">
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Password"
+                        required
+                    >
+                    <label for="password">
+                        <i class="bi bi-lock me-2"></i>Password
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-signin">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>Don't have an account?</span>
+            </div>
+
+            <div class="signup-link">
+                <a href="/user/signup">
+                    <i class="bi bi-person-plus me-2"></i>Create your account
+                </a>
+            </div>
         </div>
+    </div>
 
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="exampleInputPassword1"
-            name="password"
-          />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+    <!-- Features Section -->
+    <div class="welcome-text" style="position: absolute; top: 20px; right: 20px; max-width: 300px;">
+        <h5><i class="bi bi-stars me-2"></i>Why BlogItNow?</h5>
+        <ul style="list-style: none; padding: 0; margin: 10px 0 0 0;">
+            <li><i class="bi bi-check-circle me-2"></i>Share your stories</li>
+            <li><i class="bi bi-check-circle me-2"></i>Connect with readers</li>
+            <li><i class="bi bi-check-circle me-2"></i>Express yourself freely</li>
+        </ul>
     </div>
 
     <%- include('./partials/scripts') %>
-  </body>
+</body>
 </html>

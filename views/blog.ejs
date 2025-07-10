@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title><%= blog.title %> - BlogItNow</title>
+    <style>
+      :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --info-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        --box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        --hover-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        );
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 60%,
+            rgba(255, 255, 255, 0.05) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .main-article {
+        background: var(--card-bg);
+        border: none;
+        border-radius: 24px;
+        box-shadow: var(--box-shadow);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .blog-cover {
+        position: relative;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 24px 24px 0 0;
+      }
+
+      .blog-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .blog-cover:hover img {
+        transform: scale(1.05);
+      }
+
+      .blog-title-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        padding: 3rem 2rem 2rem;
+        color: white;
+      }
+
+      .blog-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        text-shadow: var(--text-shadow);
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      .author-section {
+        padding: 2rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .author-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid transparent;
+        background: var(--primary-gradient);
+        padding: 3px;
+      }
+
+      .author-info h6 {
+        margin: 0;
+        font-weight: 700;
+        color: #2d3748;
+        font-size: 1.1rem;
+      }
+
+      .author-info p {
+        margin: 0;
+        color: #718096;
+        font-size: 0.9rem;
+      }
+
+      .author-info i {
+        color: #667eea;
+      }
+
+      .blog-content {
+        padding: 2rem;
+      }
+
+      .blog-text {
+        font-family: "Inter", sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #2d3748;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin: 0;
+      }
+
+      .action-buttons {
+        padding: 2rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        border: 2px solid transparent;
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .action-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .action-btn:hover::before {
+        left: 100%;
+      }
+
+      .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-like {
+        border-color: #e53e3e;
+        color: #e53e3e;
+      }
+
+      .btn-like:hover {
+        background: #e53e3e;
+        color: white;
+      }
+
+      .btn-save {
+        border-color: #3182ce;
+        color: #3182ce;
+      }
+
+      .btn-save:hover {
+        background: #3182ce;
+        color: white;
+      }
+
+      .btn-share {
+        border-color: #38a169;
+        color: #38a169;
+      }
+
+      .btn-share:hover {
+        background: #38a169;
+        color: white;
+      }
+
+      .comments-card {
+        background: var(--card-bg);
+        border: none;
+        border-radius: 24px;
+        box-shadow: var(--box-shadow);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .comments-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--info-gradient);
+      }
+
+      .comments-header {
+        padding: 2rem 2rem 1rem;
+        background: transparent;
+        border: none;
+      }
+
+      .comments-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0;
+      }
+
+      .comments-title i {
+        background: var(--info-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .comments-body {
+        padding: 0 2rem 2rem;
+      }
+
+      .comment-form {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .comment-input {
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        border-radius: 50px;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
+      }
+
+      .comment-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background: white;
+      }
+
+      .comment-btn {
+        background: var(--primary-gradient);
+        border: none;
+        border-radius: 50px;
+        padding: 1rem 1.5rem;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .comment-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .comment-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid transparent;
+        background: var(--primary-gradient);
+        padding: 2px;
+      }
+
+      .comment-item {
+        padding: 1.5rem 0;
+        transition: all 0.3s ease;
+        border-radius: 16px;
+        margin: 0 -1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .comment-item:hover {
+        background: rgba(102, 126, 234, 0.05);
+      }
+
+      .comment-item:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .comment-author {
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0;
+      }
+
+      .comment-date {
+        color: #718096;
+        font-size: 0.85rem;
+      }
+
+      .comment-date i {
+        color: #667eea;
+      }
+
+      .comment-content {
+        color: #4a5568;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .empty-comments {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .empty-comments i {
+        color: #a0aec0;
+        margin-bottom: 1rem;
+      }
+
+      .empty-comments h5 {
+        color: #4a5568;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .empty-comments p {
+        color: #718096;
+        margin: 0;
+      }
+
+      .alert {
+        border: none;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+      }
+
+      .alert i {
+        color: #3b82f6;
+      }
+
+      .alert-link {
+        color: #3b82f6;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .alert-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .blog-title {
+          font-size: 2rem;
+        }
+
+        .blog-title-overlay {
+          padding: 2rem 1.5rem 1.5rem;
+        }
+
+        .author-section,
+        .blog-content,
+        .action-buttons,
+        .comments-header,
+        .comments-body {
+          padding: 1.5rem;
+        }
+
+        .comment-form {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <!-- Blog Content -->
+          <article class="main-article mb-4">
+            <div class="blog-cover">
+              <img src="<%= blog.coverImageUrl %>" alt="<%= blog.title %>" />
+              <div class="blog-title-overlay">
+                <h1 class="blog-title"><%= blog.title %></h1>
+              </div>
+            </div>
+
+            <!-- Author Info -->
+            <div class="author-section">
+              <img
+                src="<%= blog.createdBy.profileImageUrl %>"
+                alt="<%= blog.createdBy.fullName %>"
+                class="author-avatar"
+              />
+              <div class="author-info">
+                <h6><%= blog.createdBy.fullName %></h6>
+                <p>
+                  <i class="bi bi-calendar3 me-1"></i>
+                  Published on <%= new
+                  Date(blog.createdAt).toLocaleDateString('en-US', { year:
+                  'numeric', month: 'long', day: 'numeric' }) %>
+                </p>
+              </div>
+            </div>
+
+            <!-- Blog Content -->
+            <div class="blog-content">
+              <pre class="blog-text"><%= blog.body %></pre>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+              <button class="action-btn btn-like">
+                <i class="bi bi-heart me-1"></i>Like
+              </button>
+              <button class="action-btn btn-save">
+                <i class="bi bi-bookmark me-1"></i>Save
+              </button>
+              <button class="action-btn btn-share">
+                <i class="bi bi-share me-1"></i>Share
+              </button>
+            </div>
+          </article>
+
+          <!-- Comments Section -->
+          <div class="comments-card">
+            <div class="comments-header">
+              <h3 class="comments-title">
+                <i class="bi bi-chat-dots me-2"></i>
+                Comments (<%= comments.length %>)
+              </h3>
+            </div>
+
+            <div class="card-body p-4">
+              <!-- Add Comment Form -->
+              <% if (locals.user) { %>
+              <div class="comment-form">
+                <form action="/blog/comment/<%= blog._id %>" method="post">
+                  <div class="d-flex gap-3 align-items-start">
+                    <img
+                      src="<%= user.profileImageUrl %>"
+                      alt="<%= user.fullName %>"
+                      class="comment-avatar"
+                    />
+                    <div class="flex-grow-1">
+                      <div class="d-flex">
+                        <input
+                          type="text"
+                          name="content"
+                          class="form-control comment-input"
+                          placeholder="Write a comment..."
+                          required
+                        />
+                        <button type="submit" class="comment-btn ms-2">
+                          <i class="bi bi-send"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <% } else { %>
+              <div class="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                <a href="/user/signin" class="alert-link">Sign in</a> to join
+                the conversation
+              </div>
+
+              <% } %>
+
+              <!-- Comments List -->
+              <div class="comments-list">
+                <% if (comments.length > 0) { %> <% comments.forEach((comment,
+                index) => { %>
+                <div
+                  class="comment-item <%= index !== comments.length - 1 ? 'border-bottom' : '' %> py-3"
+                >
+                  <div class="d-flex gap-3">
+                    <img
+                      src="<%= comment.createdBy.profileImageUrl %>"
+                      alt="<%= comment.createdBy.fullName %>"
+                      class="rounded-circle"
+                      width="40"
+                      height="40"
+                      style="object-fit: cover"
+                    />
+                    <div class="flex-grow-1">
+                      <div class="d-flex align-items-center mb-2">
+                        <h6 class="fw-semibold mb-0 me-2">
+                          <%= comment.createdBy.fullName %>
+                        </h6>
+                        <small class="text-muted">
+                          <i class="bi bi-clock me-1"></i>
+                          <%= new Date(comment.createdAt).toLocaleDateString()
+                          %>
+                        </small>
+                      </div>
+                      <p class="mb-0 text-dark"><%= comment.content %></p>
+                    </div>
+                  </div>
+                </div>
+                <% }) %> <% } else { %>
+                <div class="empty-comments">
+                  <i class="bi bi-chat-square-dots display-4"></i>
+                  <h5>No comments yet</h5>
+                  <p>Be the first to share your thoughts!</p>
+                </div>
+
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+
+    <style>
+      .bg-gradient-to-top {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+      }
+
+      .blog-text {
+        font-family: "Inter", sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #2d3748;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin: 0;
+      }
+
+      .comment-item {
+        transition: background-color 0.2s ease;
+      }
+
+      .comment-item:hover {
+        background-color: #f8f9fa;
+      }
+
+      .blog-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+      }
+    </style>
+  </body>
+</html>
