@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Connection
-connectMongoDB('mongodb://127.0.0.1:27017/blogItNow').then(() => console.log("MongoDB connected successfully!"))
+connectMongoDB(process.env.MONGO_URL).then(() => console.log("MongoDB connected successfully!"))
     .catch((err) => console.error("MongoDB connection failed!", err));
 
 // Views
