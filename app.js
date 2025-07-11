@@ -8,6 +8,7 @@ const BlogRoute= require("./routes/blog");
 const { connectMongoDB } = require('./connection');
 const cookieParser=require("cookie-parser");
 const { checkForAuthentication } = require("./middlewares/auth");
+const methodOverride = require('method-override');
 
 const Blog= require("./models/blog");
 
@@ -24,6 +25,7 @@ app.set("views", path.resolve("./views"));
 
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
+app.use(methodOverride('_method'));
 app.use(checkForAuthentication);
 app.use(express.static(path.resolve("./public")))  // public folder will be trated as static
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Error - BlogItNow</title>
+    <style>
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f093fb;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        font-family: "Inter", sans-serif;
+      }
+
+      .error-box {
+        background: white;
+        padding: 3rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .error-box h1 {
+        font-size: 2.5rem;
+        color: #e53e3e;
+        margin-bottom: 1rem;
+      }
+
+      .error-box p {
+        font-size: 1.1rem;
+        color: #4a5568;
+        margin-bottom: 2rem;
+      }
+
+      .btn-home {
+        background: #667eea;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .btn-home:hover {
+        background: #5a67d8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-box">
+      <h1>⚠️ Access Denied</h1>
+      <p><%= message %></p>
+      <a href="/" class="btn-home">Go Home</a>
+    </div>
+  </body>
+</html>

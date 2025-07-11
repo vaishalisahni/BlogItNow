@@ -429,6 +429,41 @@
           padding: 1rem;
         }
       }
+      .bg-gradient-to-top {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+      }
+
+      .blog-text {
+        font-family: "Inter", sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #2d3748;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin: 0;
+      }
+
+      .comment-item {
+        transition: background-color 0.2s ease;
+      }
+
+      .comment-item:hover {
+        background-color: #f8f9fa;
+      }
+
+      .blog-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+      }
+      .btn-delete {
+        border-color: #e53e3e;
+        color: #e53e3e;
+      }
+
+      .btn-delete:hover {
+        background: #e53e3e;
+        color: white;
+      }
     </style>
   </head>
   <body>
@@ -480,6 +515,19 @@
               <button class="action-btn btn-share">
                 <i class="bi bi-share me-1"></i>Share
               </button>
+
+              <% if (user && (user._id.toString() ===
+              blog.createdBy._id.toString() || user.role === 'ADMIN')) { %>
+              <form
+                action="/blog/<%= blog._id %>?_method=DELETE"
+                method="POST"
+                onsubmit="return confirm('Are you sure you want to delete this blog? This action cannot be undone.');"
+              >
+                <button type="submit" class="action-btn btn-delete">
+                  <i class="bi bi-trash me-1"></i> Delete
+                </button>
+              </form>
+              <% } %>
             </div>
           </article>
 
@@ -577,34 +625,5 @@
     </div>
 
     <%- include('./partials/scripts') %>
-
-    <style>
-      .bg-gradient-to-top {
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-      }
-
-      .blog-text {
-        font-family: "Inter", sans-serif;
-        font-size: 1.1rem;
-        line-height: 1.8;
-        color: #2d3748;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        margin: 0;
-      }
-
-      .comment-item {
-        transition: background-color 0.2s ease;
-      }
-
-      .comment-item:hover {
-        background-color: #f8f9fa;
-      }
-
-      .blog-content {
-        font-size: 1.1rem;
-        line-height: 1.8;
-      }
-    </style>
   </body>
 </html>
